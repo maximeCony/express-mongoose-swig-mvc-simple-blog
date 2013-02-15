@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h3>{{ post.name }}</h3>
+<pre>{{ post.content }}</pre>
+<br/>
+<br/>
+<form action="{{ routes.commentsCreate|replace(':id', post.id) }}" method="post">
+    <fieldset>
+        <legend>New comment</legend>
+
+        <label>Author</label>
+        <input type="text" placeholder="Your name..." name="author">
+
+        <label>Content</label>
+        <textarea name="content"></textarea>
+
+        <br/>
+        <button type="submit" class="btn">Submit</button>
+
+        <br/>
+
+        {% if error %}
+        <div class="alert">
+            <strong>Warning!</strong> {{ error }}
+        </div>
+        {% endif %}
+
+    </fieldset>
+</form>
+
+{% endblock %}

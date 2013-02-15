@@ -1,0 +1,12 @@
+{
+  "name": "express-mongoose-swig-mvc-simple-blog",
+  "description": "test blog",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.x",
+    "mongoose": "3.x",
+    "swig": "0.x",
+    "consolidate": "0.x"
+  }
+}

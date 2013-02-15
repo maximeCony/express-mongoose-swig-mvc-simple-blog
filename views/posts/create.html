@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<form action="{{ routes.postsCreate }}" method="post">
+    <fieldset>
+        <legend>New post</legend>
+
+        <label>Name</label>
+        <input type="text" placeholder="Type something…" name="name">
+
+        <label>Content</label>
+        <textarea name="content"></textarea>
+
+        <br/>
+        <button type="submit" class="btn">Submit</button>
+
+        <br/>
+        
+        {% if error %}
+        <div class="alert">
+            <strong>Warning!</strong> {{ error }}
+        </div>
+        {% endif %}
+
+    </fieldset>
+</form>
+
+{% endblock %}
