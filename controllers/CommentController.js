@@ -7,9 +7,9 @@ module.exports = function(models, routes){
             if (err) return handleError(err);
             
             res.render('comments/create', {
-                title: 'Create comment',
                 routes: routes,
-                post: post
+                post: post,
+                isAdmin: req.session.isAdmin
             });
             
         });
@@ -44,9 +44,9 @@ module.exports = function(models, routes){
         } else
     
             res.render('comment/create', {
-                title: 'Create post',
                 error: 'all fields must be filled',
-                post: post
+                post: post,
+                isAdmin: req.session.isAdmin
             });
 
     };

@@ -4,8 +4,6 @@
 
 <h3>{{ post.name }}</h3>
 <pre>{{ post.content }}</pre>
-<br/>
-<br/>
 <form action="{{ routes.commentsCreate|replace(':id', post.id) }}" method="post">
     <fieldset>
         <legend>New comment</legend>
@@ -14,10 +12,10 @@
         <input type="text" placeholder="Your name..." name="author">
 
         <label>Content</label>
-        <textarea name="content"></textarea>
+        <textarea name="content" style="height: 120px; width: 100%;"></textarea>
 
         <br/>
-        <button type="submit" class="btn">Submit</button>
+        <button type="submit" class="btn">Save</button>
 
         <br/>
 

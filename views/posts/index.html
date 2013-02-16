@@ -1,47 +1,53 @@
 {% extends 'layout.html' %}
 
-{% block content %}
 
+{% block nav %}
+{% if isAdmin %}
 <a href="{{ routes.postsCreate }}" class="btn btn-primary">
     <i class="icon-plus icon-white"></i> 
     New post
 </a>
+{% endif %}
+{% parent %}
+{% endblock nav %}
 
-<div style="width: 900px; margin: auto;">
-    {% for post in posts %}
+{% block content %}
 
-    <div class="page-header">
-        <h3>{{ post.name }}</h3>
+<h1 style="text-align: center;">Node.js blog</h1>
 
-        <a href="{{ routes.postsRemove|replace(':id', post.id) }}" class="btn btn-danger">
-            <i class="icon-remove icon-white"></i>
-        </a>
+{% for post in posts %}
 
-        <a href="{{ routes.postsUpdate|replace(':id', post.id) }}" class="btn btn-warning">
-            <i class="icon-edit icon-white"></i> 
-        </a>
-        
-        <a href="{{ routes.commentCreate|replace(':id', post.id) }}" class="btn">
-            <i class="icon-pencil"></i> 
-            Comment
-        </a>
+<div class="page-header">
+    <h3>{{ post.name }}</h3>
 
-        <br/>
-        <br/>
+    <a href="{{ routes.postsRemove|replace(':id', post.id) }}" class="btn btn-danger">
+        <i class="icon-remove icon-white"></i>
+    </a>
 
-        <pre>{{ post.content }}</pre>
+    <a href="{{ routes.postsUpdate|replace(':id', post.id) }}" class="btn btn-warning">
+        <i class="icon-edit icon-white"></i> 
+    </a>
 
-        <br/>
+    <a href="{{ routes.commentCreate|replace(':id', post.id) }}" class="btn">
+        <i class="icon-pencil"></i> 
+        Comment
+    </a>
 
-        {% for comment in post.comments %}
-        <blockquote>
-            <p>{{ comment.content }}</p>
-            <small>{{ comment.author }}</small>
-        </blockquote>
-        {% endfor %}
+    <br/>
+    <br/>
 
-    </div>
+    <pre>{{ post.content }}</pre>
 
+    <br/>
+
+    {% for comment in post.comments %}
+    <blockquote>
+        <p>{{ comment.content }}</p>
+        <small>{{ comment.author }}</small>
+    </blockquote>
     {% endfor %}
+
 </div>
+
+{% endfor %}
 {% endblock %}

@@ -2,7 +2,7 @@ module.exports = function(models, routes){
 
     this.checkAuth = function(req, res, next){
         
-        if (!req.session.userId) {
+        if (!req.session.isAdmin) {
             res.redirect(routes.login);
         } else {
             next();
@@ -13,7 +13,6 @@ module.exports = function(models, routes){
     this.loginGet = function(req, res){
         
         res.render('security/login', {
-            title: 'Login',
             routes: routes
         });
         
@@ -23,11 +22,10 @@ module.exports = function(models, routes){
         
         var post = req.body;
         if (post.login == 'admin' && post.password == 'password') {
-            req.session.userId = 'admin';
+            req.session.isAdmin = true;
             res.redirect(routes.posts);
         } else {
             res.render('security/login', {
-            title: 'Log in',
             routes: routes,
             error: 'Invalid login/password'
         });
