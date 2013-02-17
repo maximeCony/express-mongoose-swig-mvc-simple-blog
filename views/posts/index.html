@@ -18,26 +18,29 @@
 {% for post in posts %}
 
 <div class="page-header">
-    <h3>{{ post.name }}</h3>
+    <h3 style="display: inline;">{{ post.name }}</h3>
 
-    <a href="{{ routes.postsRemove|replace(':id', post.id) }}" class="btn btn-danger">
+    {% if isAdmin %}
+    <a href="{{ routes.postsRemove|replace(':id', post.id) }}" class="btn btn-danger" style="float: right; margin-left: 5px;">
         <i class="icon-remove icon-white"></i>
     </a>
 
-    <a href="{{ routes.postsUpdate|replace(':id', post.id) }}" class="btn btn-warning">
+    <a href="{{ routes.postsUpdate|replace(':id', post.id) }}" class="btn btn-warning" style="float: right;">
         <i class="icon-edit icon-white"></i> 
     </a>
+    <br/>
+    {% endif %}
 
-    <a href="{{ routes.commentCreate|replace(':id', post.id) }}" class="btn">
+    <br/>
+
+    <pre>{{ post.content }}</pre>
+
+    <a href="{{ routes.commentCreate|replace(':id', post.id) }}" class="btn" style="float: right;">
         <i class="icon-pencil"></i> 
         Comment
     </a>
 
     <br/>
-    <br/>
-
-    <pre>{{ post.content }}</pre>
-
     <br/>
 
     {% for comment in post.comments %}

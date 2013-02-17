@@ -34,8 +34,8 @@ app.post(routes.postsUpdate, securityController.checkAuth, postController.postUp
 app.get(routes.postsCreate, securityController.checkAuth, postController.postCreateGet);
 app.post(routes.postsCreate, securityController.checkAuth, postController.postCreatePost);
 
-app.get(routes.commentCreate, securityController.checkAuth, commentController.commentCreateGet);
-app.post(routes.commentCreate, securityController.checkAuth, commentController.commentCreatePost);
+app.get(routes.commentCreate, commentController.commentCreateGet);
+app.post(routes.commentCreate, commentController.commentCreatePost);
 
 app.get(routes.logout, securityController.logout);
 app.get(routes.login, securityController.loginGet);
