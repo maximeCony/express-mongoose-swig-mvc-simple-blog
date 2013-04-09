@@ -2,9 +2,10 @@ var express = require("express")
 , app = express()
 , cons = require('consolidate')
 , mongoose = require('mongoose')
-, swig = require('swig');
-    
-    
+, swig = require('swig')
+, server = require('http').createServer(app)
+, io = require('socket.io').listen(server);
+
 var config = require('./config.js')(app, express, mongoose, cons, swig);
 
 var models = {};
@@ -41,5 +42,13 @@ app.get(routes.logout, securityController.logout);
 app.get(routes.login, securityController.loginGet);
 app.post(routes.login, securityController.loginPost);
 
-app.listen(3000);
-console.log('Listening on port 3000');
+
+var stream = models.Post.find().stream();
+
+server.listen(5000);
+io.sockets.on('connection', function (socket) {
+  socket.emit('getPosts', { posts: stream });
+});
+
+//app.listen(80);
+console.log('Listening on port 5000');

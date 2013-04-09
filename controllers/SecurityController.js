@@ -38,7 +38,5 @@ module.exports = function(models, routes){
         res.redirect(routes.login);
     };
     
-   
-    
     return this;
 };

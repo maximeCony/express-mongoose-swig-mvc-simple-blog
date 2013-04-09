@@ -13,6 +13,15 @@
 
 {% block content %}
 
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.on('getPosts', function (data) {
+    console.log(data);
+  });
+</script>
+
+
 <h1 style="text-align: center;">Node.js blog</h1>
 
 {% for post in posts %}
