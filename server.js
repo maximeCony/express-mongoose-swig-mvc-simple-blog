@@ -45,10 +45,13 @@ app.post(routes.login, securityController.loginPost);
 
 var stream = models.Post.find().stream();
 
-server.listen(5000);
+var theport = process.env.PORT || 5000;
+
+
+server.listen(theport);
 io.sockets.on('connection', function (socket) {
   socket.emit('getPosts', { posts: stream });
 });
 
 //app.listen(80);
-console.log('Listening on port 5000');
+console.log('Listening on port ' + theport);

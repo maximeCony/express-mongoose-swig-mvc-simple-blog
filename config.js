@@ -9,7 +9,7 @@ module.exports = function(app, express, mongoose, cons, swig){
     var MemStore = express.session.MemoryStore;
     app.use(express.session({
         secret: 'admin'
-        }));
+    }));
 
     app.engine('.html', cons.swig);
     app.set('view engine', 'html');
@@ -21,6 +21,17 @@ module.exports = function(app, express, mongoose, cons, swig){
         allowErrors: true // allows errors to be thrown and caught by express instead of suppressed by Swig
     });
 
-    mongoose.connect('mongodb://localhost/blogNode');
+    var uristring = 
+    process.env.MONGOLAB_URI || 
+    process.env.MONGOHQ_URL || 
+    'mongodb://localhost/blogNode';
+
+    mongoose.connect(uristring, function (err, res) {
+      if (err) { 
+          console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+      } else {
+          console.log ('Succeeded connected to: ' + uristring);
+      }
+  });
 
 };
