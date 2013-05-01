@@ -44,7 +44,7 @@ module.exports = function(models, routes){
     //logout the user
     this.logout = function(req, res){
         //remove the credentials from the session
-        delete req.session.userId;
+        delete req.session.isAdmin;
         //redirect to login form
         res.redirect(routes.login);
     };

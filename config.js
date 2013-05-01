@@ -8,7 +8,7 @@ module.exports = function(app, express, mongoose, cons, swig){
     
     //session configuration
     app.use(express.cookieParser());
-    var MemStore = express.session.MemoryStore;
+    
     app.use(express.session({
         secret: 'admin'
     }));
