@@ -1,7 +1,11 @@
 module.exports = function(models, routes){
 
+    /**
+    * get the list of posts
+    */
     this.postIndex = function(req, res){
     
+        //get all the posts
         models.Post.find({},null,{
             sort:{
                 date: -1 //Sort by Date Added DESC
@@ -10,6 +14,7 @@ module.exports = function(models, routes){
       
             if (err) return handleError(err);
       
+            //render the list of posts
             res.render('posts/index', {
                 posts: posts,
                 routes: routes,
@@ -18,8 +23,12 @@ module.exports = function(models, routes){
         });
     };
     
+    /**
+    * get the post list as JSON
+    */
     this.postListJson= function(req, res){
     
+        //find all posts
         models.Post.find({}, function(err, posts){
       
             if (err) return handleError(err);
@@ -28,31 +37,75 @@ module.exports = function(models, routes){
         });
     };
 
+    /**
+    * get the create post form
+    */
     this.postCreateGet = function(req, res){
     
+        //renderthe view
         res.render('posts/create', {
             routes: routes,
             isAdmin: req.session.isAdmin
         });
     };
+
+    /**
+    * create a post
+    */
+    this.postCreatePost = function(req, res){
     
+        //check mandatory fields
+        if(req.body.name && req.body.content) {
+        
+            //create a new post
+            var post = new models.Post({
+                name: req.body.name,
+                content: req.body.content
+            });
+            
+            //save it
+            post.save(function (err) {
+                if (err) return handleError(err);
+                //redirect to /posts
+                res.redirect(routes.posts);
+            });       
+        
+        } else
+            //If there is some missing parameters render the form with the error
+            res.render('posts/create', {
+                error: 'all fields must be filled',
+                isAdmin: req.session.isAdmin
+            });
+
+    };
+    
+    /**
+    * remove a post
+    */
     this.postRemove = function(req, res){
        
+       //remove the post
         models.Post.remove({
             _id: req.params.id
         }, function (err, post) {
             
             if (err) return handleError(err);
+            //redirect to /posts
             res.redirect(routes.posts);
         });
     };
     
+    /**
+    * gate the update post form
+    */
     this.postUpdateGet = function(req, res){
        
+        //get the post by _id
         models.Post.findById(req.params.id, function (err, post) {
             
             if (err) return handleError(err);
             
+            //render the page
             res.render('posts/update', {
                 post: post,
                 routes: routes,
@@ -62,55 +115,35 @@ module.exports = function(models, routes){
         });
     };
     
+    /**
+    * update a post
+    */
     this.postUpdatePost = function(req, res){
        
+        //check mandatory fields
         if(req.body.name && req.body.content) {
        
+            //update the post
             models.Post.update({
-                _id: req.params.id
+                _id: req.params.id  //find by _id
             }, {
                 name: req.body.name ,
                 content: req.body.content 
             }, {
-                multi: false
+                multi: false        //since we are finding by id we just need one result
             }, function (err, numberAffected, raw) {
                 if (err) return handleError(err);
-                console.log('The number of updated documents was %d', numberAffected);
-                console.log('The raw response from Mongo was ', raw);
-            
+                //redirect to /posts
                 res.redirect(routes.posts);
             });
         
         } else
-    
+            
+            //If there is some missing parameters render the form with the error
             res.render('posts/create', {
                 error: 'all fields must be filled',
                 isAdmin: req.session.isAdmin
             });
-    };
-
-    this.postCreatePost = function(req, res){
-    
-        if(req.body.name && req.body.content) {
-        
-            var post = new models.Post({
-                name: req.body.name,
-                content: req.body.content
-            });
-            
-            post.save(function (err) {
-                if (err) return handleError(err);
-            
-                res.redirect(routes.posts);
-            });       
-        
-        } else
-    
-            res.render('posts/create', {
-                error: 'all fields must be filled',
-                isAdmin: req.session.isAdmin
-            });
-
     };
     
     return this;

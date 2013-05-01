@@ -46,7 +46,6 @@ module.exports = function(models, routes){
                 post.save(function (err) {
                     
                     if (err) return handleError(err);
-                    
                     //redirect to /posts
                     res.redirect(routes.posts);
                 });  

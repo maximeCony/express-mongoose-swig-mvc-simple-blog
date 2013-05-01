@@ -30,6 +30,12 @@ var postController = require('./controllers/PostController')(models, routes);
 var commentController = require('./controllers/CommentController')(models, routes);
 var securityController = require('./controllers/SecurityController')(models, routes);
 
+//get /
+app.get('/', function(req, res){
+	//redirect to /posts
+	res.redirect(routes.posts);
+});
+
 //match routes and controllers
 //check auth with the securityController
 app.get(routes.posts, postController.postIndex);
@@ -48,5 +54,8 @@ app.get(routes.login, securityController.loginGet);
 app.post(routes.login, securityController.loginPost);
 
 
-var port = process.env.PORT || 5000;
-console.log('Listening on port ' + port);
+//start listening
+var port = process.env.PORT || 3000;
+app.listen(port, function() {
+	console.log("Listening on " + port);
+});
