@@ -7,8 +7,7 @@
     "express": "3.x",
     "mongoose": "3.x",
     "swig": "0.x",
-    "consolidate": "0.x",
-    "socket.io": "*"
+    "consolidate": "0.x"
   },
   "engines": {
     "node": "0.10.x",

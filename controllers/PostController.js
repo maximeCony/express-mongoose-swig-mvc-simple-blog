@@ -102,7 +102,7 @@ module.exports = function(models, routes){
                 if (err) return handleError(err);
             
                 res.redirect(routes.posts);
-            })       
+            });       
         
         } else
     

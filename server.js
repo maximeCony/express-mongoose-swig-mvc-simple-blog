@@ -3,15 +3,17 @@ var express = require("express")
 , cons = require('consolidate')
 , mongoose = require('mongoose')
 , swig = require('swig')
-, server = require('http').createServer(app)
-, io = require('socket.io').listen(server);
+, server = require('http').createServer(app);
 
+//load server config
 var config = require('./config.js')(app, express, mongoose, cons, swig);
 
+//load models
 var models = {};
 models.Post = require('./models/Post')(mongoose, models).model;
 models.Comment = require('./models/Comment')(mongoose, models).model;
 
+//load routes
 var routes = {
     posts : '/posts',
     postsJson : '/posts.json',
@@ -23,10 +25,13 @@ var routes = {
     logout : '/logout'
 }
 
+//load controllers
 var postController = require('./controllers/PostController')(models, routes);
 var commentController = require('./controllers/CommentController')(models, routes);
 var securityController = require('./controllers/SecurityController')(models, routes);
 
+//match routes and controllers
+//check auth with the securityController
 app.get(routes.posts, postController.postIndex);
 app.get(routes.postsJson, securityController.checkAuth, postController.postListJson);
 app.get(routes.postsRemove, securityController.checkAuth, postController.postRemove);
@@ -43,15 +48,5 @@ app.get(routes.login, securityController.loginGet);
 app.post(routes.login, securityController.loginPost);
 
 
-var stream = models.Post.find().stream();
-
-var theport = process.env.PORT || 5000;
-
-
-server.listen(theport);
-io.sockets.on('connection', function (socket) {
-  socket.emit('getPosts', { posts: stream });
-});
-
-//app.listen(80);
-console.log('Listening on port ' + theport);
+var port = process.env.PORT || 5000;
+console.log('Listening on port ' + port);
