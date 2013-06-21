@@ -13,45 +13,47 @@ var models = {};
 models.Post = require('./models/Post')(mongoose, models).model;
 models.Comment = require('./models/Comment')(mongoose, models).model;
 
-//load routes
-var routes = {
-    posts : '/posts',
-    postsJson : '/posts.json',
-    postsRemove : '/posts/:id/remove',
-    postsUpdate : '/posts/:id/update',
-    postsCreate : '/posts/create',
-    commentCreate : '/posts/:id/comments/create',
-    login : '/login',
-    logout : '/logout'
-}
+app.locals({
+
+    routes: {
+        posts: '/posts',
+        postsJson: '/posts.json',
+        postsRemove: '/posts/:id/remove',
+        postsUpdate: '/posts/:id/update',
+        postsCreate: '/posts/create',
+        commentCreate: '/posts/:id/comments/create',
+        login: '/login',
+        logout: '/logout'
+   }
+});
 
 //load controllers
-var postController = require('./controllers/PostController')(models, routes);
-var commentController = require('./controllers/CommentController')(models, routes);
-var securityController = require('./controllers/SecurityController')(models, routes);
+var postController = require('./controllers/PostController')(models, app);
+var commentController = require('./controllers/CommentController')(models, app);
+var securityController = require('./controllers/SecurityController')(models, app);
 
 //get /
 app.get('/', function(req, res){
 	//redirect to /posts
-	res.redirect(routes.posts);
+	res.redirect(app.locals.routes.posts);
 });
 
 //match routes and controllers
 //check auth with the securityController
-app.get(routes.posts, postController.postIndex);
-app.get(routes.postsJson, securityController.checkAuth, postController.postListJson);
-app.get(routes.postsRemove, securityController.checkAuth, postController.postRemove);
-app.get(routes.postsUpdate, securityController.checkAuth, postController.postUpdateGet);
-app.post(routes.postsUpdate, securityController.checkAuth, postController.postUpdatePost);
-app.get(routes.postsCreate, securityController.checkAuth, postController.postCreateGet);
-app.post(routes.postsCreate, securityController.checkAuth, postController.postCreatePost);
+app.get(app.locals.routes.posts, postController.postIndex);
+app.get(app.locals.routes.postsJson, securityController.checkAuth, postController.postListJson);
+app.get(app.locals.routes.postsRemove, securityController.checkAuth, postController.postRemove);
+app.get(app.locals.routes.postsUpdate, securityController.checkAuth, postController.postUpdateGet);
+app.post(app.locals.routes.postsUpdate, securityController.checkAuth, postController.postUpdatePost);
+app.get(app.locals.routes.postsCreate, securityController.checkAuth, postController.postCreateGet);
+app.post(app.locals.routes.postsCreate, securityController.checkAuth, postController.postCreatePost);
 
-app.get(routes.commentCreate, commentController.commentCreateGet);
-app.post(routes.commentCreate, commentController.commentCreatePost);
+app.get(app.locals.routes.commentCreate, commentController.commentCreateGet);
+app.post(app.locals.routes.commentCreate, commentController.commentCreatePost);
 
-app.get(routes.logout, securityController.logout);
-app.get(routes.login, securityController.loginGet);
-app.post(routes.login, securityController.loginPost);
+app.get(app.locals.routes.logout, securityController.logout);
+app.get(app.locals.routes.login, securityController.loginGet);
+app.post(app.locals.routes.login, securityController.loginPost);
 
 
 //start listening

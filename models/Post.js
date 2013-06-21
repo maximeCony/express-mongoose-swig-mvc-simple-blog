@@ -7,7 +7,12 @@ module.exports = function(mongoose, models) {
     name: String,
     content: String,
     date: { type: Date, default: Date.now },
-    comments: [models.Comment]
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+  })
+  .pre('remove', function(next) {
+    //Delete Cascade
+    models.Comment.remove({post: this._id}).exec();
+    next();
   });
 
   this.model = mongoose.model(collection, schema);

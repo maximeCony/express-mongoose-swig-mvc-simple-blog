@@ -6,7 +6,8 @@ module.exports = function(mongoose, models) {
     var schema = new Schema({
         author: String,
         date: { type: Date, default: Date.now },
-        content: String
+        content: String,
+        post : { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
     });
 
     this.model = mongoose.model(collection, schema);

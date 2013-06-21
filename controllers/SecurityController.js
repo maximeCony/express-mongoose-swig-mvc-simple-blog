@@ -1,11 +1,11 @@
-module.exports = function(models, routes){
+module.exports = function(models, app){
 
     //check if the user is logged
     this.checkAuth = function(req, res, next){
         //check if the user is admin
         if (!req.session.isAdmin) {
             //redirect to login page
-            res.redirect(routes.login);
+            res.redirect(app.locals.routes.login);
         } else {
             //continue to next controller
             next();
@@ -16,10 +16,7 @@ module.exports = function(models, routes){
     //get login page
     this.loginGet = function(req, res){
         
-        res.render('security/login', {
-            routes: routes
-        });
-        
+        res.render('security/login');
     };
     
     //set login credentials
@@ -30,13 +27,12 @@ module.exports = function(models, routes){
         if (post.login == 'admin' && post.password == 'password') {
             //user is now admin
             req.session.isAdmin = true;
-            res.redirect(routes.posts);
+            res.redirect(app.locals.routes.posts);
         } else {
             //redirect to login form
             res.render('security/login', {
-            routes: routes,
-            error: 'Invalid login/password'
-        });
+                error: 'Invalid login/password'
+            });
         }
         
     };
@@ -46,7 +42,7 @@ module.exports = function(models, routes){
         //remove the credentials from the session
         delete req.session.isAdmin;
         //redirect to login form
-        res.redirect(routes.login);
+        res.redirect(app.locals.routes.login);
     };
     
     return this;

@@ -1,4 +1,4 @@
-module.exports = function(models, routes){
+module.exports = function(models, app){
 
     /**
     * get the list of posts
@@ -17,7 +17,6 @@ module.exports = function(models, routes){
             //render the list of posts
             res.render('posts/index', {
                 posts: posts,
-                routes: routes,
                 isAdmin: req.session.isAdmin
             });
         });
@@ -44,7 +43,6 @@ module.exports = function(models, routes){
     
         //renderthe view
         res.render('posts/create', {
-            routes: routes,
             isAdmin: req.session.isAdmin
         });
     };
@@ -67,7 +65,7 @@ module.exports = function(models, routes){
             post.save(function (err) {
                 if (err) return handleError(err);
                 //redirect to /posts
-                res.redirect(routes.posts);
+                res.redirect(app.locals.routes.posts);
             });       
         
         } else
@@ -108,7 +106,6 @@ module.exports = function(models, routes){
             //render the page
             res.render('posts/update', {
                 post: post,
-                routes: routes,
                 isAdmin: req.session.isAdmin
             });
             
@@ -134,7 +131,7 @@ module.exports = function(models, routes){
             }, function (err, numberAffected, raw) {
                 if (err) return handleError(err);
                 //redirect to /posts
-                res.redirect(routes.posts);
+                res.redirect(app.locals.routes.posts);
             });
         
         } else

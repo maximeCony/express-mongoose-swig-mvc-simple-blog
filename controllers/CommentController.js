@@ -1,4 +1,4 @@
-module.exports = function(models, routes){
+module.exports = function(models, app){
 
     /**
     * send the create comment form
@@ -8,14 +8,11 @@ module.exports = function(models, routes){
         models.Post.findById(req.params.id, function (err, post) {
             
             if (err) return handleError(err);
-            
             //render the view
             res.render('comments/create', {
-                routes: routes,     //pass routes to handle links
                 post: post,         //pass the related post
                 isAdmin: req.session.isAdmin
             });
-            
         });
         
     };
@@ -27,7 +24,7 @@ module.exports = function(models, routes){
     
         //check mandatory fields
         if(req.body.author && req.body.content) {
-        
+
             //find the post
             models.Post.findById(req.params.id, function (err, post) {
             
@@ -47,7 +44,7 @@ module.exports = function(models, routes){
                     
                     if (err) return handleError(err);
                     //redirect to /posts
-                    res.redirect(routes.posts);
+                    res.redirect(app.locals.routes.posts);
                 });  
             
             });
