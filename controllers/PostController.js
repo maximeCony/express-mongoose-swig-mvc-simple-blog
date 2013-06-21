@@ -10,7 +10,10 @@ module.exports = function(models, app){
             sort:{
                 date: -1 //Sort by Date Added DESC
             }
-        }, function(err, posts){
+        })
+        //populate the comments in the posts objects
+        .populate('comments')
+        .exec(function(err, posts){
       
             if (err) return handleError(err);
       
@@ -28,10 +31,13 @@ module.exports = function(models, app){
     this.postListJson= function(req, res){
     
         //find all posts
-        models.Post.find({}, function(err, posts){
+        models.Post.find()
+        //populate the comments in the posts objects
+        .populate('comments')
+        .exec(function(err, posts){
       
             if (err) return handleError(err);
-      
+            //send the posts
             res.send(posts);
         });
     };
@@ -68,13 +74,13 @@ module.exports = function(models, app){
                 res.redirect(app.locals.routes.posts);
             });       
         
-        } else
+        } else {
             //If there is some missing parameters render the form with the error
             res.render('posts/create', {
                 error: 'all fields must be filled',
                 isAdmin: req.session.isAdmin
             });
-
+        }
     };
     
     /**
@@ -134,13 +140,14 @@ module.exports = function(models, app){
                 res.redirect(app.locals.routes.posts);
             });
         
-        } else
+        } else {
             
             //If there is some missing parameters render the form with the error
             res.render('posts/create', {
                 error: 'all fields must be filled',
                 isAdmin: req.session.isAdmin
             });
+        }
     };
     
     return this;

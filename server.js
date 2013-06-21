@@ -41,12 +41,14 @@ app.get('/', function(req, res){
 //match routes and controllers
 //check auth with the securityController
 app.get(app.locals.routes.posts, postController.postIndex);
-app.get(app.locals.routes.postsJson, securityController.checkAuth, postController.postListJson);
 app.get(app.locals.routes.postsRemove, securityController.checkAuth, postController.postRemove);
 app.get(app.locals.routes.postsUpdate, securityController.checkAuth, postController.postUpdateGet);
 app.post(app.locals.routes.postsUpdate, securityController.checkAuth, postController.postUpdatePost);
 app.get(app.locals.routes.postsCreate, securityController.checkAuth, postController.postCreateGet);
 app.post(app.locals.routes.postsCreate, securityController.checkAuth, postController.postCreatePost);
+
+//json
+app.get(app.locals.routes.postsJson, postController.postListJson);
 
 app.get(app.locals.routes.commentCreate, commentController.commentCreateGet);
 app.post(app.locals.routes.commentCreate, commentController.commentCreatePost);
