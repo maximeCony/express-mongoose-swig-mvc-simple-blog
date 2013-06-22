@@ -1,17 +1,10 @@
-module.exports = function(app, express, mongoose, cons, swig){
+module.exports = function(app, express, mongoose, cons, swig, MongoStore){
 
     // serve static files
     app.use("/public", express.static(__dirname + '/public'));
 
     //used to parse Post form
     app.use(express.bodyParser());
-    
-    //session configuration
-    app.use(express.cookieParser());
-    
-    app.use(express.session({
-        secret: 'admin'
-    }));
 
     //set swig as view engine
     app.engine('.html', cons.swig);
@@ -30,13 +23,23 @@ module.exports = function(app, express, mongoose, cons, swig){
     process.env.MONGOHQ_URL || 
     'mongodb://localhost/blogNode';
 
+    //session configuration
+    app.use(express.cookieParser());
+    
+    app.use(express.session({
+      store: new MongoStore({
+        url: uristring
+      }),
+      secret: 'SECURE'
+    }));
+
     //connect to mongodb
     mongoose.connect(uristring, function (err, res) {
-      if (err) { 
+        if (err) { 
           console.log ('ERROR connecting to: ' + uristring + '. ' + err);
-      } else {
+        } else {
           console.log ('Succeeded connected to: ' + uristring);
-      }
-  });
+        }
+    });
 
 };

@@ -3,10 +3,11 @@ var express = require("express")
 , cons = require('consolidate')
 , mongoose = require('mongoose')
 , swig = require('swig')
-, server = require('http').createServer(app);
+, server = require('http').createServer(app)
+, MongoStore = require('connect-mongo')(express);
 
 //load server config
-var config = require('./config.js')(app, express, mongoose, cons, swig);
+var config = require('./config.js')(app, express, mongoose, cons, swig, MongoStore);
 
 //load models
 var models = {};
